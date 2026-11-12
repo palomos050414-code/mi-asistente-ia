@@ -4,7 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Valentina · Asesora de maquillaje</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="color-scheme" content="dark light">
+  <!-- Único script en línea: fija tema y paleta antes del primer pintado para evitar el parpadeo (la lógica real vive en script.js) -->
+  <script>
+    (function () {
+      try {
+        var d = document.documentElement, t = localStorage.getItem('tema_asistente'), a = localStorage.getItem('acento_asistente');
+        if (t !== 'claro' && t !== 'oscuro') t = matchMedia('(prefers-color-scheme: light)').matches ? 'claro' : 'oscuro';
+        d.dataset.tema = t;
+        d.dataset.acento = (a === 'rosa' || a === 'coral') ? a : 'violeta';
+      } catch (e) { /* sin almacenamiento: valen los valores por defecto del CSS */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
   <div class="app menu-oculto" id="app">
@@ -23,6 +35,19 @@
       </form>
 
       <p id="aviso-clave" class="aviso" role="status"></p>
+
+      <!-- Selector de paleta: radios nativos (navegación con flechas) -->
+      <fieldset class="paleta" id="selector-acento">
+        <legend>Color de acento</legend>
+        <div class="paleta-opciones">
+          <input type="radio" name="acento" id="acento-violeta" value="violeta" class="sr-only">
+          <label for="acento-violeta" class="muestra muestra-violeta" title="Violeta"><span class="sr-only">Violeta</span></label>
+          <input type="radio" name="acento" id="acento-rosa" value="rosa" class="sr-only">
+          <label for="acento-rosa" class="muestra muestra-rosa" title="Rosa"><span class="sr-only">Rosa</span></label>
+          <input type="radio" name="acento" id="acento-coral" value="coral" class="sr-only">
+          <label for="acento-coral" class="muestra muestra-coral" title="Coral"><span class="sr-only">Coral</span></label>
+        </div>
+      </fieldset>
     </aside>
 
     <div class="contenido">
@@ -36,14 +61,37 @@
         </div>
         <button id="btn-sidebar" class="btn-icono" aria-label="Mostrar u ocultar barra lateral" aria-controls="sidebar" aria-expanded="false">☰</button>
         <button id="btn-nuevo" class="btn-icono" aria-label="Nuevo chat">+</button>
+        <!-- Interruptor de tema: cara feliz rosa claro en modo claro, cara triste café claro en modo oscuro -->
+        <button id="btn-tema" class="btn-icono btn-tema" aria-label="Cambiar a modo claro">
+          <svg class="icono-feliz" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="#ffc4d9" stroke="#7a2c4d" stroke-width="1.4"/>
+            <circle cx="8.6" cy="9.6" r="1.5" fill="#5a1d36"/>
+            <circle cx="15.4" cy="9.6" r="1.5" fill="#5a1d36"/>
+            <path d="M7.5 14c1 2.6 3 3.8 4.5 3.8s3.5-1.2 4.5-3.8" fill="none" stroke="#5a1d36" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <svg class="icono-triste" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="#d2ad84" stroke="#6b4423" stroke-width="1.4"/>
+            <circle cx="8.6" cy="9.6" r="1.5" fill="#3b2412"/>
+            <circle cx="15.4" cy="9.6" r="1.5" fill="#3b2412"/>
+            <path d="M7.5 17c1-2.6 3-3.8 4.5-3.8s3.5 1.2 4.5 3.8" fill="none" stroke="#3b2412" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
       </header>
 
       <!-- Zona de conversación -->
       <main class="chat" id="chat">
         <section class="bienvenida" id="bienvenida">
-          <div class="logo logo-grande" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="44" height="44">
-              <path fill="currentColor" d="M12 2c-1.7 2.8-6 4.6-6 9a6 6 0 0 0 12 0c0-4.4-4.3-6.2-6-9z"/>
+          <!-- Ilustración: labial (usa currentColor y variables del tema) -->
+          <div class="ilustracion" aria-hidden="true">
+            <svg viewBox="0 0 120 140" width="96" height="112">
+              <circle class="destello" cx="96" cy="28" r="3" fill="var(--acento)"/>
+              <circle class="destello destello-2" cx="24" cy="46" r="2.2" fill="var(--acento)"/>
+              <circle class="destello destello-3" cx="88" cy="60" r="1.6" fill="var(--acento)"/>
+              <path d="M50 66V42l15-18q5-4 5 3v39z" fill="var(--acento)"/>
+              <rect x="46" y="66" width="28" height="12" rx="2" fill="currentColor" opacity=".55"/>
+              <rect x="42" y="78" width="36" height="44" rx="5" fill="currentColor"/>
+              <rect x="42" y="92" width="36" height="4" fill="var(--fondo)" opacity=".4"/>
+              <ellipse cx="60" cy="132" rx="26" ry="4" fill="var(--acento)" opacity=".2"/>
             </svg>
           </div>
           <h1>¡Hola! ¿De qué quieres hablar hoy?</h1>
@@ -82,6 +130,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=3"></script>
 </body>
 </html>
