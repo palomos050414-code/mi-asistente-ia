@@ -5,6 +5,10 @@ const MODELO_RAZONAMIENTO = 'qwen3.8-2.4t-a95b'; // "Pensamiento Profundo": reas
 const CLAVE_STORAGE = 'dashscope_api_key'; // Nombre de la clave en sessionStorage
 const PENSAMIENTO_STORAGE = 'pensamiento_profundo'; // Estado del chip "Pensamiento Profundo"
 const MAX_HISTORIAL = 20;                   // Mensajes recientes que se envían al modelo
+const TEMA_STORAGE = 'tema_asistente';      // Tema elegido (localStorage: no es un dato sensible)
+const ACENTO_STORAGE = 'acento_asistente';  // Paleta de acento elegida (localStorage)
+const TEMAS = ['oscuro', 'claro'];
+const ACENTOS = ['violeta', 'rosa', 'coral'];
 
 // Instrucciones de personalidad del asistente
 const PROMPT_SISTEMA = `Eres Valentina, vendedora virtual de una tienda de maquillaje.
@@ -41,6 +45,9 @@ const mensajes = document.getElementById('mensajes');
 const formChat = document.getElementById('form-chat');
 const textarea = document.getElementById('mensaje');
 const btnEnviar = document.getElementById('btn-enviar');
+const btnTema = document.getElementById('btn-tema');
+const radiosAcento = document.querySelectorAll('input[name="acento"]');
+const consultaClaro = window.matchMedia('(prefers-color-scheme: light)');
 
 // Historial de la conversación en memoria (solo mensajes de usuario y asistente)
 let historial = [];
@@ -53,6 +60,9 @@ let indicadorEscribiendo = null;
 
 // ===== Inicio =====
 function iniciar() {
+  // Tema y paleta (independiente de la clave y del chat)
+  iniciarTema();
+
   // Si hay una clave guardada en esta sesión, la rellenamos
   const claveGuardada = obtenerClave();
   if (claveGuardada) {
@@ -74,6 +84,72 @@ function iniciar() {
   formChat.addEventListener('submit', enviarMensaje);
   textarea.addEventListener('input', ajustarAltura);
   textarea.addEventListener('keydown', manejarTeclado);
+}
+
+// ===== Tema y paleta =====
+
+// Lee de localStorage sin romper si el navegador lo bloquea
+function leerPreferencia(clave) {
+  try {
+    return localStorage.getItem(clave);
+  } catch {
+    return null;
+  }
+}
+
+// Guarda en localStorage; si no se puede, la preferencia dura solo esta visita
+function guardarPreferencia(clave, valor) {
+  try {
+    localStorage.setItem(clave, valor);
+  } catch {
+    // Sin almacenamiento disponible: se ignora
+  }
+}
+
+// Aplica el tema en <html> y actualiza el aria-label del interruptor
+function aplicarTema(tema) {
+  document.documentElement.dataset.tema = tema;
+  btnTema.setAttribute('aria-label', tema === 'oscuro' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+}
+
+// Aplica la paleta en <html> y marca el radio correspondiente
+function aplicarAcento(acento) {
+  document.documentElement.dataset.acento = acento;
+  radiosAcento.forEach((radio) => {
+    radio.checked = radio.value === acento;
+  });
+}
+
+// Alterna oscuro/claro y recuerda la elección manual
+function alternarTema() {
+  const nuevo = document.documentElement.dataset.tema === 'oscuro' ? 'claro' : 'oscuro';
+  aplicarTema(nuevo);
+  guardarPreferencia(TEMA_STORAGE, nuevo);
+}
+
+// Cambia la paleta de acento desde el selector
+function elegirAcento(evento) {
+  aplicarAcento(evento.target.value);
+  guardarPreferencia(ACENTO_STORAGE, evento.target.value);
+}
+
+// Sigue el tema del sistema solo si el usuario no eligió uno manualmente
+function alCambiarTemaSistema(evento) {
+  if (TEMAS.includes(leerPreferencia(TEMA_STORAGE))) return;
+  aplicarTema(evento.matches ? 'claro' : 'oscuro');
+}
+
+// Sincroniza la interfaz con lo que dejó el <head> y registra los eventos
+function iniciarTema() {
+  const guardado = leerPreferencia(TEMA_STORAGE);
+  aplicarTema(TEMAS.includes(guardado) ? guardado : (consultaClaro.matches ? 'claro' : 'oscuro'));
+
+  const acentoGuardado = leerPreferencia(ACENTO_STORAGE);
+  aplicarAcento(ACENTOS.includes(acentoGuardado) ? acentoGuardado : 'violeta');
+
+  btnTema.addEventListener('click', alternarTema);
+  radiosAcento.forEach((radio) => radio.addEventListener('change', elegirAcento));
+  consultaClaro.addEventListener('change', alCambiarTemaSistema);
 }
 
 // ===== Gestión de la clave =====
