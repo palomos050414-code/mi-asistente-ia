@@ -2,7 +2,7 @@
 
 Asistente virtual experto en ventas — **Valentina**, asesora de maquillaje — desarrollado con HTML, CSS y JavaScript puro (sin build ni dependencias).
 
-**Demo:** https://jorgeivangrisalesmarin-art.github.io/asistente-ia/
+**Demo:** https://palomos050414-code.github.io/mi-asistente-ia/
 
 ## Características
 
