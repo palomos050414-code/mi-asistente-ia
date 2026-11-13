@@ -16,13 +16,18 @@
       } catch (e) { /* sin almacenamiento: valen los valores por defecto del CSS */ }
     })();
   </script>
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
   <div class="app menu-oculto" id="app">
 
     <!-- Barra lateral: configuración de la clave de Alibaba Cloud (Model Studio) -->
     <aside class="sidebar" id="sidebar" aria-label="Configuración">
+      <div class="sidebar-marca">
+        <span class="monograma" aria-hidden="true">V</span>
+        <div><strong>Valentina</strong><small>Asesora de maquillaje</small></div>
+      </div>
+
       <h2>Configuración</h2>
 
       <form id="form-clave" class="clave-form" autocomplete="off">
@@ -54,28 +59,32 @@
 
       <!-- Barra superior: logo y botones -->
       <header class="topbar">
-        <div class="logo" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="28" height="28">
-            <path fill="currentColor" d="M12 2c-1.7 2.8-6 4.6-6 9a6 6 0 0 0 12 0c0-4.4-4.3-6.2-6-9z"/>
-          </svg>
+        <div class="marca">
+          <span class="monograma" aria-hidden="true">V</span>
+          <div>
+            <span class="marca-nombre">Valentina</span>
+            <span class="marca-detalle">Asesora de maquillaje</span>
+          </div>
         </div>
-        <button id="btn-sidebar" class="btn-icono" aria-label="Mostrar u ocultar barra lateral" aria-controls="sidebar" aria-expanded="false">☰</button>
-        <button id="btn-nuevo" class="btn-icono" aria-label="Nuevo chat">+</button>
-        <!-- Interruptor de tema: cara feliz rosa claro en modo claro, cara triste café claro en modo oscuro -->
-        <button id="btn-tema" class="btn-icono btn-tema" aria-label="Cambiar a modo claro">
-          <svg class="icono-feliz" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" fill="#ffc4d9" stroke="#7a2c4d" stroke-width="1.4"/>
-            <circle cx="8.6" cy="9.6" r="1.5" fill="#5a1d36"/>
-            <circle cx="15.4" cy="9.6" r="1.5" fill="#5a1d36"/>
-            <path d="M7.5 14c1 2.6 3 3.8 4.5 3.8s3.5-1.2 4.5-3.8" fill="none" stroke="#5a1d36" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-          <svg class="icono-triste" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" fill="#d2ad84" stroke="#6b4423" stroke-width="1.4"/>
-            <circle cx="8.6" cy="9.6" r="1.5" fill="#3b2412"/>
-            <circle cx="15.4" cy="9.6" r="1.5" fill="#3b2412"/>
-            <path d="M7.5 17c1-2.6 3-3.8 4.5-3.8s3.5 1.2 4.5 3.8" fill="none" stroke="#3b2412" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-        </button>
+        <div class="topbar-acciones">
+          <button id="btn-sidebar" class="btn-icono" aria-label="Mostrar u ocultar barra lateral" aria-controls="sidebar" aria-expanded="false">☰</button>
+          <button id="btn-nuevo" class="btn-icono" aria-label="Nuevo chat">+</button>
+          <!-- Interruptor de tema: cara feliz rosa claro en modo claro, cara triste café claro en modo oscuro -->
+            <button id="btn-tema" class="btn-icono btn-tema" aria-label="Cambiar a modo claro">
+              <svg class="icono-feliz" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" fill="#ffc4d9" stroke="#7a2c4d" stroke-width="1.4"/>
+                <circle cx="8.6" cy="9.6" r="1.5" fill="#5a1d36"/>
+                <circle cx="15.4" cy="9.6" r="1.5" fill="#5a1d36"/>
+                <path d="M7.5 14c1 2.6 3 3.8 4.5 3.8s3.5-1.2 4.5-3.8" fill="none" stroke="#5a1d36" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+              <svg class="icono-triste" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" fill="#d2ad84" stroke="#6b4423" stroke-width="1.4"/>
+                <circle cx="8.6" cy="9.6" r="1.5" fill="#3b2412"/>
+                <circle cx="15.4" cy="9.6" r="1.5" fill="#3b2412"/>
+                <path d="M7.5 17c1-2.6 3-3.8 4.5-3.8s3.5 1.2 4.5 3.8" fill="none" stroke="#3b2412" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </button>
+        </div>
       </header>
 
       <!-- Zona de conversación -->
@@ -94,7 +103,13 @@
               <ellipse cx="60" cy="132" rx="26" ry="4" fill="var(--acento)" opacity=".2"/>
             </svg>
           </div>
-          <h1>¡Hola! ¿De qué quieres hablar hoy?</h1>
+          <h1>Hola, soy Valentina. ¿Qué look buscas hoy?</h1>
+          <p class="bienvenida-texto">Cuéntame tu tipo de piel, la ocasión o tu presupuesto y te recomiendo qué productos te convienen.</p>
+          <div class="sugerencias" id="sugerencias">
+            <button type="button" class="sugerencia" data-texto="Necesito una rutina de maquillaje para piel seca">Rutina para piel seca</button>
+            <button type="button" class="sugerencia" data-texto="Quiero un look natural para ir al trabajo">Look natural para el trabajo</button>
+            <button type="button" class="sugerencia" data-texto="¿Qué labial me recomiendas para una fiesta?">Labial para una fiesta</button>
+          </div>
         </section>
         <div class="mensajes" id="mensajes"></div>
       </main>
@@ -103,7 +118,7 @@
       <footer class="pie">
         <form id="form-chat" class="entrada">
           <label for="mensaje" class="sr-only">Escribe tu mensaje</label>
-          <textarea id="mensaje" rows="1" placeholder="Mensaje al asistente de maquillaje"></textarea>
+          <textarea id="mensaje" rows="1" placeholder="Cuéntame qué look buscas…"></textarea>
 
           <div class="entrada-barra">
             <div class="chips">
@@ -126,10 +141,11 @@
             </div>
           </div>
         </form>
+        <p class="nota">Valentina puede equivocarse. Consulta el catálogo oficial para precios y existencias.</p>
       </footer>
     </div>
   </div>
 
-  <script src="script.js?v=3"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>
