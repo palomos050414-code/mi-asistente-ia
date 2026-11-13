@@ -12,6 +12,8 @@ Asistente virtual experto en ventas — **Valentina**, asesora de maquillaje —
   - **Pensamiento Profundo:** `qwen3.8-2.4t-a95b` — reasoning puro con streaming SSE; la respuesta crece en vivo en la conversación.
 - La **API key la aporta cada usuario**: se pega en la barra lateral y se guarda solo en `sessionStorage` (nunca sale del navegador ni se persiste entre sesiones).
 - Mensajes de error amigables según el caso (clave inválida, límite de consultas, modelo no disponible, red).
+- **Tema claro/oscuro** con interruptor (cara feliz rosa claro en modo claro, cara triste café claro en modo oscuro) y **selector de paleta** de acento (violeta, rosa, coral). Se recuerdan entre visitas y, sin elección previa, se sigue el tema del sistema.
+- Animaciones suaves (entrada de mensajes, transición de tema, ilustración SVG de labial) que respetan `prefers-reduced-motion`.
 - Accesibilidad (`aria-pressed`, `aria-label`) y protección XSS (render con `textContent`).
 
 ## Cómo usar
@@ -47,9 +49,9 @@ No requiere build ni instalación de dependencias.
 ## Estructura
 
 ```
-index.html   # UI del chat y formulario de la clave
-styles.css   # Tema oscuro y estilos
-script.js    # Lógica: clave, modos de modelo, llamadas normal y streaming
+index.html   # UI: chat, clave, interruptor de tema y selector de paleta
+styles.css   # Variables de tema (oscuro/claro), paletas y animaciones
+script.js    # Lógica: tema y paleta, clave, modos de modelo, llamadas normal y streaming
 ```
 
 ## Notas técnicas
@@ -57,3 +59,10 @@ script.js    # Lógica: clave, modos de modelo, llamadas normal y streaming
 - **CORS:** el endpoint internacional de Model Studio permite llamadas directas desde el navegador (verificado para este dominio de GitHub Pages); no se usa ningún proxy.
 - El modo normal envía `enable_thinking: false` para respuesta inmediata; el modo razonamiento usa `enable_thinking: true` + `stream: true` (obligatorio para `qwen3.8-2.4t-a95b`, que es reasoning puro).
 - El razonamiento interno del modelo (`reasoning_content`) se acumula solo para diagnóstico en consola; no se muestra al usuario.
+
+## Tema y paleta
+
+- Se aplican con `data-tema="oscuro|claro"` y `data-acento="violeta|rosa|coral"` en `<html>`; todo el color sale de variables CSS en `styles.css`.
+- Se guardan en `localStorage` (`tema_asistente`, `acento_asistente`). La clave API sigue solo en `sessionStorage`.
+- Un pequeño script en el `<head>` de `index.html` fija el tema antes de pintar para evitar el parpadeo.
+- Para añadir una paleta: un bloque `[data-acento="nombre"]` en `styles.css`, un radio en `index.html` y el nombre en `ACENTOS` de `script.js`.
