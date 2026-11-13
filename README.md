@@ -13,6 +13,7 @@ Asistente virtual experto en ventas — **Valentina**, asesora de maquillaje —
 - La **API key la aporta cada usuario**: se pega en la barra lateral y se guarda solo en `sessionStorage` (nunca sale del navegador ni se persiste entre sesiones).
 - Mensajes de error amigables según el caso (clave inválida, límite de consultas, modelo no disponible, red).
 - **Tema claro/oscuro** con interruptor (cara feliz rosa claro en modo claro, cara triste café claro en modo oscuro) y **selector de paleta** de acento (violeta, rosa, coral). Se recuerdan entre visitas y, sin elección previa, se sigue el tema del sistema.
+- Diseño profesional: barra lateral con marca, tipografía serif en títulos, sugerencias de inicio y aviso de uso.
 - Animaciones suaves (entrada de mensajes, transición de tema, ilustración SVG de labial) que respetan `prefers-reduced-motion`.
 - Accesibilidad (`aria-pressed`, `aria-label`) y protección XSS (render con `textContent`).
 
