@@ -48,6 +48,7 @@ const btnEnviar = document.getElementById('btn-enviar');
 const btnTema = document.getElementById('btn-tema');
 const radiosAcento = document.querySelectorAll('input[name="acento"]');
 const consultaClaro = window.matchMedia('(prefers-color-scheme: light)');
+const sugerencias = document.getElementById('sugerencias');
 
 // Historial de la conversación en memoria (solo mensajes de usuario y asistente)
 let historial = [];
@@ -84,6 +85,7 @@ function iniciar() {
   formChat.addEventListener('submit', enviarMensaje);
   textarea.addEventListener('input', ajustarAltura);
   textarea.addEventListener('keydown', manejarTeclado);
+  sugerencias.addEventListener('click', usarSugerencia);
 }
 
 // ===== Tema y paleta =====
@@ -277,6 +279,15 @@ function manejarTeclado(evento) {
     evento.preventDefault();
     formChat.requestSubmit();
   }
+}
+
+// Rellena el cuadro de texto con la sugerencia elegida (sin enviarla)
+function usarSugerencia(evento) {
+  const boton = evento.target.closest('.sugerencia');
+  if (!boton) return;
+  textarea.value = boton.dataset.texto;
+  ajustarAltura();
+  textarea.focus();
 }
 
 // ===== Envío de mensajes =====
